@@ -24,7 +24,8 @@ RUN wget "https://github.com/karlheyes/icecast-kh/archive/icecast-$IC_VERSION.ta
 	cd "icecast-kh-icecast-$IC_VERSION" && \
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var && \
 	make && make install && useradd icecast && \
-	chown -R icecast /etc/icecast.xml /etc/ezstream.xml
+  mv /etc/icecast.xml /etc/icecast && \
+	chown -R icecast /etc/icecast
 
 USER icecast
 CMD ["/start.sh"]
