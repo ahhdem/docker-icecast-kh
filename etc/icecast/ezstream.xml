@@ -4,7 +4,7 @@
     <server>
       <name>icecast</name>
       <hostname>localhost</hostname>
-      <password>ICECAST_PASSWORD</password>
+      <password>ICECAST_SOURCE_PASSWORD</password>
     </server>
   </servers>
 
