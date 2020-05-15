@@ -40,4 +40,4 @@ COPY silence.mp3 /
 EXPOSE 8000
 VOLUME ["/config", "/var/log/icecast"]
 USER icecast
-CMD ["/start.sh"]
+ENTRYPOINT ["/usr/bin/dumb-init", "/start.sh"]
