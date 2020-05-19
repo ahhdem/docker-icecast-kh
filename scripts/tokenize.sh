@@ -6,16 +6,6 @@ ICECAST_EZSTREAM_MOUNT=${ICECAST_EZSTREAM_MOUNT:-fallback}
 ICECAST_STREAM_URL=${ICECAST_STREAM_URL:-'http://icecast'}
 ICECAST_STREAM_NAME=${ICECAST_STREAM_NAME:-'amazing radio'}
 
-# Copy untokenized configs frmo protected area
-# Tokenize
-sed -i'' \
-  -e "s/ICECAST_HOST/${ICECAST_HOST}/g" \
-  -e "s/ICECAST_SOURCE_PASSWORD/${ICECAST_SOURCE_PASSWORD}/g" \
-  -e "s/ICECAST_STREAM_NAME/${ICECAST_STREAM_NAME}/g" \
-  -e "s^ICECAST_STREAM_URL^${ICECAST_STREAM_URL}^g" \
-  -e "s/ICECAST_EZSTREAM_MOUNT/${ICECAST_EZSTREAM_MOUNT}/g" \
-  /etc/icecast/ezstream.xml
-
 
 if [ -n "$ICECAST_SOURCE_PASSWORD" ]; then
     sed -i'' -e "s/<source-password>[^<]*<\/source-password>/<source-password>$ICECAST_SOURCE_PASSWORD<\/source-password>/g" /etc/icecast/icecast.xml

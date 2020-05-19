@@ -14,6 +14,7 @@ RUN apt-get -qq -y update && \
     libvorbis-dev \
     libtheora-dev \
 		libspeex-dev \
+    procps \
   dumb-init  && \
   mv /etc/apt/sources.list /etc/apt/sources.list.d/stable.list && \
   apt-get -qq -y update && \
@@ -21,23 +22,25 @@ RUN apt-get -qq -y update && \
   wget "https://github.com/karlheyes/icecast-kh/archive/icecast-$IC_VERSION.tar.gz" -O- | tar zxvf - && \
   cd "icecast-kh-icecast-$IC_VERSION" && \
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var && \
-  make && make install && useradd icecast && \
+  make && make install && \
   apt-get purge --auto-remove -y \
     build-essential \
     curl \
     gcc \
     wget && \
   apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache && \
+  useradd icecast
 
-COPY etc/icecast /etc/icecast
-RUN mv /etc/icecast.xml /etc/icecast && \
-	chown -R icecast /etc/icecast
+VOLUME ["/etc/icecast", "/var/log/icecast"]
+RUN chown -R icecast:icecast /etc/icecast/ /var/log/icecast/
+RUN chown -R icecast:icecast /etc/icecast/ /var/log/icecast/ && ls -alhrt /etc/icecast
+
+USER icecast
+RUN id
 
 COPY scripts /
 COPY silence.mp3 /
 
 EXPOSE 8000
-VOLUME ["/config", "/var/log/icecast"]
-USER icecast
-ENTRYPOINT ["/usr/bin/dumb-init", "/start.sh"]
+ENTRYPOINT ["/usr/bin/dumb-init", "/entrypoint.sh"]
